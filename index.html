@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BDG Predictor</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: #ffffff;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    h2 {
+      margin-top: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #1f1f1f;
+      color: white;
+      border: 1px solid #555;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #333;
+    }
+  </style>
+</head>
+<body>
+  <h1>BDG Predictor</h1>
+  <button onclick="getPrediction()">Show Next Round Prediction</button>
+  <h2 id="prediction">Prediction will appear here</h2>
+
+  <script>
+    function getPrediction() {
+      const apiUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent('https://api.bdg88zf.com/api/webapi/GetNoaverageEmerdList?GameCode=win5&Count=1');
+
+      fetch(apiUrl)
+        .then(response => {
+          if (response.ok) return response.json();
+          throw new Error('Network response was not ok.');
+        })
+        .then(data => {
+          const parsed = JSON.parse(data.contents);
+          const latestRound = parsed.Data[0];
+          document.getElementById("prediction").textContent =
+            `Next Prediction: ${latestRound.Number}`;
+        })
+        .catch(error => {
+          console.error("Failed to load prediction:", error);
+          document.getElementById("prediction").textContent =
+            "Failed to load prediction.";
+        });
+    }
+  </script>
+</body>
+</html>
